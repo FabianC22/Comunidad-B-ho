@@ -1,0 +1,217 @@
+---
+title: "Resultados Unal"
+format: html
+editor: visual
+---
+
+### Análisis de resultados UNAL
+
+#### Resultados por área
+
+Vemos que el área a la que le fue mejor en este primer simulacro fue análisis de imagen y la que le fue mal es matemáticas.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+library(readxl)
+library(plotly)
+Resultados_Unal <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/Resultados Unal.xlsx")
+S1 <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/Simulacros.xlsx", 
+    sheet = "Simulacro 1")
+puntajes1<- data.frame(S1[,5:10])
+S2 <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/Simulacros.xlsx", 
+    sheet = "Simulacro 2")
+puntajes2<- data.frame(S2[,5:10])
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+Resul_unal<- data.frame(Resultados_Unal[,4:8])
+## Crear el boxplot comparativo
+fig <- plot_ly(y = Resul_unal$Textual, type = "box", name="Textual")
+fig <- fig %>% add_trace(y = Resul_unal$Matemáticas, name="Matemáticas")
+fig <- fig %>% add_trace(y = Resul_unal$Sociales,  name="Ciencias Sociales")
+fig <- fig %>% add_trace(y = Resul_unal$Ciencias,  name="Ciencias Naturales")
+fig <- fig %>% add_trace(y = Resul_unal$Imagen, name="Análisis de Imagen")
+#fig <- fig %>% add_trace(y = puntajes1$Global, name="Puntajes Globales")
+fig <- fig %>% layout(title = "Resultados por componente")
+
+fig
+
+```
+
+#### Resultado global
+
+Vemos que la mediana esta por encima del promedio estandarizado, es decir que el grupo esta por encima del promedio.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = Resultados_Unal$Puntaje, type = "box", name="Imagen_S1")
+fig <- fig %>% layout(title = "Puntajes Globales")
+
+fig
+```
+
+### Estado de Admisión
+
+En este semestre fueron admitidos el $12 \%$ entre mochuelxs y monitorxs de 42.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+text(x = barplot(table(Resultados_Unal$Estado)/42, col = "skyblue",ylim = c(0,1),main = "Estado de Admisión",ylab = "Porcentaje",xlab = "Estado" ), table(Resultados_Unal$Estado)/42, labels =round( table(Resultados_Unal$Estado)/42,2) )
+```
+
+### Comparación por áreas respecto a los resultados UNAL
+
+#### Textual
+
+Textual esta por encima del promedio estandarizado, es decir que su rendimiento fue bueno.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Textual, type = "box", name="Textual_S1")
+fig <- fig %>% add_trace(y = puntajes2$Textual, name="Textual_S2")
+fig <- fig %>% add_trace(y =Resul_unal$Textual, name="Textual_Unal")
+fig <- fig %>% layout(title = "Textual")
+
+fig
+```
+
+#### Matemáticas
+
+Matemáticas no hubo mejora considerable.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Matemáticas, type = "box", name="Matemáticas_S1")
+fig <- fig %>% add_trace(y = puntajes2$Matemáticas, name="Matemáticas_S2")
+fig <- fig %>% add_trace(y =Resul_unal$Matemáticas, name="Matemáticas_Unal")
+fig <- fig %>% layout(title = "Matemáticas")
+
+fig
+```
+
+#### Ciencias Sociales
+
+Ciencias Sociales hubo pequeña mejora.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Sociales, type = "box", name="Sociales_S1")
+fig <- fig %>% add_trace(y = puntajes2$Sociales, name="Sociales_S2")
+fig <- fig %>% add_trace(y =Resul_unal$Sociales, name="Sociales_Unal")
+fig <- fig %>% layout(title = "Ciencias Sociales")
+
+fig
+```
+
+#### Ciencias Naturales
+
+Ciencias Naturales esta por encima del promedio estandarizado, es decir que su rendimiento fue bueno.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Naturales, type = "box", name="Ciencias_S1")
+fig <- fig %>% add_trace(y = puntajes2$Ciencias, name="Ciencias_S2")
+fig <- fig %>% add_trace(y =Resul_unal$Ciencias, name="Ciencias_Unal")
+fig <- fig %>% layout(title = "Ciencias Naturales")
+
+fig
+```
+
+#### Análisis de Imagen
+
+Análisis de imagen esta por encima del promedio estandarizado, es decir que su rendimiento fue bueno.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Imagen, type = "box", name="Imagen_S1")
+fig <- fig %>% add_trace(y = puntajes2$Imagen, name="Imagen_S2")
+fig <- fig %>% add_trace(y =Resul_unal$Imagen, name="Imagen_Unal")
+fig <- fig %>% layout(title = "Análisis de Imagen_")
+
+fig
+```
+
+### Comparación de puntajes globales
+
+En general vemos que los puntajes mejoraron en comparación con los dos simulacros, es decir que en el examen Unal a los mochuelxs les fue mejor.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Global, type = "box", name="Global_S1")
+fig <- fig %>% add_trace(y = puntajes2$Global, name="Global_S2")
+fig <- fig %>% add_trace(y =Resultados_Unal$Puntaje, name="Global_Unal")
+fig <- fig %>% layout(title = "Análisis de Imagen_")
+
+fig
+```
+
+### Rendimiento del mochuelx respecto al examen UNAL
+
+Se presenta la comparación individual de cada mochuelx en las diferentes áreas y su puntaje global con sus resultados en la prueba UNAL.
+
+#### Puntaje global
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+library(pyramid)
+General_S1 <- merge(S1, Resultados_Unal, by = "Documento")
+datos_global_S1<-data.frame(S1=General_S1$Global,Resultados_Unal=General_S1$Puntaje,Nombre=General_S1$Nombres)
+pyramid(datos_global_S1,Llab="S1",Rlab="Resultados_Unal",Clab="Nombre",main="Rendimiento Global ",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+General_S2 <- merge(S2, Resultados_Unal, by = "Documento")
+datos_global_S2<-data.frame(S2=General_S2$Global,Resultados_Unal=General_S2$Puntaje,Nombre=General_S2$Nombres)
+pyramid(datos_global_S2,Llab="S2",Rlab="Resultados_Unal",Clab="Nombre",main="Rendimiento Global ",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+#### Textual
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+
+datos_global_S1<-data.frame(S1=General_S1$Textual.x,Textual=General_S1$Textual.y,Nombre=General_S1$Nombres)
+pyramid(datos_global_S1,Llab="S1",Rlab="Textual",Clab="Nombre",main="Textual ",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S2<-data.frame(S2=General_S2$Textual.x,Textual=General_S2$Textual.y,Nombre=General_S2$Nombres)
+pyramid(datos_global_S2,Llab="S2",Rlab="Textual",Clab="Nombre",main="Textual",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+#### Matemáticas
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S1<-data.frame(S1=General_S1$Matemáticas.x,Matemáticas=General_S1$Matemáticas.y,Nombre=General_S1$Nombres)
+pyramid(datos_global_S1,Llab="S1",Rlab="Matemáticas",Clab="Nombre",main="Matemáticas",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S2<-data.frame(S2=General_S2$Matemáticas.x,Matemáticas=General_S2$Matemáticas.y,Nombre=General_S2$Nombres)
+pyramid(datos_global_S2,Llab="S2",Rlab="Matemáticas",Clab="Nombre",main="Matemáticas",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+#### Ciencias Sociales
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S1<-data.frame(S1=General_S1$Sociales.x,Sociales=General_S1$Sociales.y,Nombre=General_S1$Nombres)
+pyramid(datos_global_S1,Llab="S1",Rlab="Sociales",Clab="Nombre",main="Ciencias Sociales",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S2<-data.frame(S2=General_S2$Sociales.x,Sociales=General_S2$Sociales.y,Nombre=General_S2$Nombres)
+pyramid(datos_global_S2,Llab="S2",Rlab="Sociales",Clab="Nombre",main="Ciencias Sociales",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+#### Ciencias Naturales
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S1<-data.frame(S1=General_S1$Naturales,Ciencias=General_S1$Ciencias,Nombre=General_S1$Nombres)
+pyramid(datos_global_S1,Llab="S1",Rlab="Ciencias",Clab="Nombre",main="Ciencias Naturales",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S2<-data.frame(S2=General_S2$Ciencias.x,Ciencias=General_S2$Ciencias.y,Nombre=General_S2$Nombres)
+pyramid(datos_global_S2,Llab="S2",Rlab="Ciencias",Clab="Nombre",main="Ciencias Naturales",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+#### Análisis de Imagen
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S1<-data.frame(S1=General_S1$Imagen.x,Imagen=General_S1$Imagen.y,Nombre=General_S1$Nombres)
+pyramid(datos_global_S1,Llab="S1",Rlab="Imagen",Clab="Nombre",main="Análisis de imagen",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_global_S2<-data.frame(S2=General_S2$Imagen.x,Imagen=General_S2$Imagen.y,Nombre=General_S2$Nombres)
+pyramid(datos_global_S2,Llab="S2",Rlab="Imagen",Clab="Nombre",main="Análisis de imagen",Lcol="green", Rcol="cyan", Cgap=0.3,Csize=0.5)
+```

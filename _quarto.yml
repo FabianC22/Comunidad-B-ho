@@ -1,0 +1,28 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Comunidad Búho 2024-1"
+  search: 
+    location: navbar
+    type: overlay
+  navbar:
+    left:
+      - href: Demo.qmd
+        text: Información Demográfica
+      - href: Simulacros.qmd
+        text: Resultados Simulacros
+      - href: Resultados_Unal.qmd
+        text: Resultados Unal
+format:
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+
+editor: visual
+
+

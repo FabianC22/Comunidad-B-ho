@@ -1,0 +1,321 @@
+---
+title: "Información Demográficas"
+format: html
+editor: visual
+---
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+library(dplyr)
+library(sf)
+library(readxl)
+library(ggplot2)
+library(ggspatial)
+library(colorspace)
+library(purrr)
+library(tidyverse)
+library(ggrepel)
+library(patchwork)
+library(plotly)
+
+
+```
+
+```{r,warning=FALSE,message=FALSE,include = FALSE, echo=FALSE}
+bd <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/info.xlsx")
+bd2 <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/info2.xlsx")
+Localidades <- read.csv("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/Localidades.txt", sep=";")
+shp <- sf::st_read("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/loca/Loca.shp", quiet = T)
+prueba <- st_as_sf(shp)
+#Se crea el centroide
+prueba <- prueba %>% mutate(centroid = map(geometry, st_centroid), 
+                            coords = map(centroid, st_coordinates),
+                            coords_x = map_dbl(coords, 1), 
+                            coords_y = map_dbl(coords, 2))
+
+
+```
+
+```{r,warning=FALSE,message=FALSE,include = FALSE, echo=FALSE}
+
+Puntajes_dep<- matrix(0, nrow = 21, ncol = 3)
+for (i in 1:21) {
+  dep<- bd[ bd$`Codigo localidad` == Localidades[i,2] ,]
+  Yi_dep<-length(dep$`Codigo localidad`)
+  Puntajes_dep[i,1]<-Localidades[i,1]
+  Puntajes_dep[i,2]<-Localidades[i,2]
+  Puntajes_dep[i,3]<-Yi_dep
+}
+
+Conteo_localidades<- as.data.frame(Puntajes_dep)
+Conteo_localidades$V3<- as.numeric(Conteo_localidades$V3) 
+colnames(Conteo_localidades) <- c('Localidad',"Codloc","Conteo")
+
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "1"] <- "01"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "2"] <- "02"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "3"] <- "03"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "4"] <- "04"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "5"] <- "05"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "6"] <- "06"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "7"] <- "07"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "8"] <- "08"
+Conteo_localidades$Codloc[Conteo_localidades$Codloc== "9"] <- "09"
+
+
+p1<- prueba %>% 
+  rename(Codloc= LocCodigo) %>% 
+  left_join(y = Conteo_localidades, by = "Codloc") %>% 
+  ggplot(mapping = aes(fill = Conteo)) +
+  geom_sf(aes(fill = Conteo), size = 2, color = "white")  +
+  theme_bw() + 
+  xlab("Longitud") + ylab("Latitud") +
+  labs(title = "Postulados por localidad",
+       caption = "Fuente: Comunidad Búho (2024-1)
+       Fabián Castellanos",) +
+  annotation_scale() +
+  annotation_north_arrow(location='tl') +
+  ggspatial::geom_spatial_text_repel(mapping = aes(coords_x, coords_y, label = Codloc), size = 3, color ="black")
+
+
+
+```
+
+```{r, echo=FALSE}
+
+Puntajes_dep2<- matrix(0, nrow = 21, ncol = 3)
+for (i in 1:21) {
+  dep2<- bd2[ bd2$`Codigo localidad` == Localidades[i,2] ,]
+  Yi_dep<-length(dep2$`Codigo localidad`)
+  Puntajes_dep2[i,1]<-Localidades[i,1]
+  Puntajes_dep2[i,2]<-Localidades[i,2]
+  Puntajes_dep2[i,3]<-Yi_dep
+}
+
+Conteo_localidades2<- as.data.frame(Puntajes_dep2)
+Conteo_localidades2$V3<- as.numeric(Conteo_localidades2$V3) 
+colnames(Conteo_localidades2) <- c('Localidad',"Codloc","Conteo")
+
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "1"] <- "01"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "2"] <- "02"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "3"] <- "03"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "4"] <- "04"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "5"] <- "05"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "6"] <- "06"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "7"] <- "07"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "8"] <- "08"
+Conteo_localidades2$Codloc[Conteo_localidades2$Codloc== "9"] <- "09"
+
+
+
+p2<- prueba %>% 
+  rename(Codloc= LocCodigo) %>% 
+  left_join(y = Conteo_localidades2, by = "Codloc") %>% 
+  ggplot(mapping = aes(fill = Conteo)) +
+  geom_sf(aes(fill = Conteo), size = 2, color = "white")  +
+  theme_bw() + 
+  xlab("Longitud") + ylab("Latitud") +
+  labs(title = "Admitidos por localidad",
+       caption = "Fuente: Comunidad Búho (2024-1)
+       Fabián Castellanos",) +
+  annotation_scale() +
+  annotation_north_arrow(location='tl') +
+  ggspatial::geom_spatial_text_repel(mapping = aes(coords_x, coords_y, label = Codloc), size = 3, color ="black")
+
+
+```
+
+### Población por localidad
+
+#### Postulados por localidad
+
+En el siguiente mapa observamos la cantidad de postulados por localidad, vemos que Suba, Bosa, Engativa y Kennedy son las que tienen una mayor postulación.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+
+# We define a base color for the map
+base_color <- "blue"
+# We can create a color palette around the base color employing functions of the colorspace package.
+color_points <- c(
+  lighten(base_color, 0.5),
+  base_color,
+  darken(base_color, 0.8)
+)
+color_palette <- colorRampPalette(color_points)
+colors_map <- color_palette(10)
+
+p1 + scale_fill_gradientn(colours = colors_map  , name = "Número de postulantes") 
+
+```
+
+#### Admitidos por localidad
+
+Al comparar con el mapa anteriormente presentado, vemos que sigue manteniendo la predominancia de las localidades en la que se presenta mas personas.
+
+```{r ,warning=FALSE,message=FALSE ,echo=FALSE}
+p2+ scale_fill_gradientn(colours = colors_map  , name = "Número de postulantes")
+```
+
+### Estrato Socioeconómico
+
+Al realizar la comparación de los postulados y los admitidos vemos que se mantienen los porcetajes de cada estrato.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+
+###### Estrato postulados 
+
+bd$socioeconomic_level<-as.character(bd$socioeconomic_level)
+
+df_p<-data.frame(table(bd$socioeconomic_level)) 
+colnames(df_p) <- c('Estrato',"Freq")
+df_p$Porcentaje<- (df_p$Freq)/sum(df_p$Freq) 
+df_p <- df_p %>% mutate(etiquetas = scales::percent(Porcentaje))
+
+f1<-ggplot(df_p, aes(x = "", y = Porcentaje, fill = Estrato)) +
+  ggtitle("Estrato Socioeconómico postulados")+
+  geom_col(color = "black") +
+  geom_text(aes(label = etiquetas),
+            position = position_stack(vjust = 0.5)) +
+  scale_fill_viridis_d() +
+  coord_polar(theta = "y") + 
+  theme_void()
+
+###### Estrato admitidos
+
+bd2$socioeconomic_level<-as.character(bd2$socioeconomic_level)
+
+df_p2<-data.frame(table(bd2$socioeconomic_level)) 
+colnames(df_p2) <- c('Estrato',"Freq")
+df_p2$Porcentaje<- (df_p2$Freq)/sum(df_p2$Freq) 
+df_p2 <- df_p2 %>% mutate(etiquetas = scales::percent(Porcentaje))
+
+f2<-ggplot(df_p2, aes(x = "", y = Porcentaje, fill = Estrato)) +
+  ggtitle("Estrato Socioeconómico admitidos")+
+  geom_col(color = "black") +
+  geom_text(aes(label = etiquetas),
+            position = position_stack(vjust = 0.5)) +
+  scale_fill_viridis_d() +
+  coord_polar(theta = "y") + 
+  theme_void()
+
+f1+f2
+```
+
+### Tipo de Colegio
+
+Al realizar la comparación de los postulados y los admitidos vemos que se mantienen las proporciones entre las personas de colegio público y privado.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+### Tipo de Colegio- General.
+par(mfrow = c(1, 2))
+#>>> general
+text(x = barplot(table(bd$get_school_type_display), col = "skyblue",ylim = c(0,400),main = "Tipo de Colegio-Postulados" ) 
+     + 0.5, y = table(bd$get_school_type_display) + 1,
+     labels = table(bd$get_school_type_display), pos = 3, cex = 1, col = "black")
+
+#>>> mochuelos
+text(x = barplot(table(bd2$get_school_type_display), col = "skyblue",ylim = c(0,40),main = "Tipo de Colegio-Admitidos" ) 
+     + 0.5, y = table(bd2$get_school_type_display) + 1,
+     labels = table(bd2$get_school_type_display), pos = 3, cex = 1, col = "black")
+
+```
+
+### Año de graduación del Colegio.
+
+#### Postulados
+
+La mayor cantidad de postulados son los que se graduaron en el 2023.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+
+#### Año de grado
+#>>> general
+bd$prom_year<- as.character(bd$prom_year) 
+text(x = barplot(table(bd$prom_year), col = "skyblue",ylim = c(0,400),main = "Año de Grado Colegio-Postulados" ) 
+     + 0.5, y = table(bd$prom_year) + 1,
+     labels = table(bd$prom_year), pos = 3, cex = 1, col = "black")
+
+```
+
+#### Admitidos
+
+La mayor cantidad de admitidos son los que se graduaron en el 2023.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+#>>> mochuelos
+bd2$prom_year<- as.character(bd2$prom_year) 
+text(x = barplot(table(bd2$prom_year), col = "skyblue",ylim = c(0,40),main = "Año de Grado Colegio-Admitidos" ) 
+     + 0.5, y = table(bd2$prom_year) + 1,
+     labels = table(bd2$prom_year), pos = 3, cex = 1, col = "black")
+
+```
+
+### ¿Como se entero de la comunidad?
+
+La mayoria de personas postuladas se enteraron de la convocatoria por redes sociales.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+### saber de la comunidad
+par(mfrow = c(1, 1))
+text(x = barplot(table(bd$get_how_did_you_find_out_display), col = "skyblue",ylim = c(0,400),main = "Como llego a la Comunidad" ) 
+     + 0.5, y = table(bd$get_how_did_you_find_out_display) + 1,
+     labels = table(bd$get_how_did_you_find_out_display), pos = 3, cex = 1, col = "black")
+
+```
+
+### Población postulada fuera de Bogotá
+
+#### Postulados
+
+Las personas que mas se presentan a la comunidad que son fuera de Bogotá son el municipio de Soacha.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+#### Fuera de Bogotá 
+
+### postulados
+
+
+dep1<- bd[ bd$`Codigo localidad` == 99  ,]
+text(x = barplot(table(dep1$actual_city_or_district) ,col = "skyblue",ylim = c(0,40),main = "Población fuera de Bogotá", las=2  ) 
+     + 0.5, y = table(dep1$actual_city_or_district) + 1,
+     labels = table(dep1$actual_city_or_district), pos = 3, cex = 1, col = "black")
+par(las = 2)
+
+```
+
+#### Admitidos
+
+Las personas admitidas a la comunidad que viven fuera de Bogotá pertenecen a los municipios de Ibagué, Mosquera y Soacha.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+dep2<- bd2[ bd2$`Codigo localidad` == 99  ,]
+text(x = barplot(table(dep2$actual_city_or_district), col = "skyblue",ylim = c(0,4),main = "Población fuera de Bogotá"  ) 
+     + 0.5, y = table(dep2$actual_city_or_district) + 1,
+     labels = table(dep2$actual_city_or_district), pos = 3, cex = 1, col = "black")
+par(las = 2)
+
+```
+
+### Puntajes Unal
+
+#### Postulados
+
+Son los puntajes que se postularon a la convocatoria que en algún momento presentaron el examen de admisión.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+### Puntajes Icfes y Unal 
+
+## general
+Unal<- bd[ bd$unal_result != 0 & bd$unal_result != 1 &  bd$unal_result != 53,]
+hist(Unal$unal_result, main = "Puntajes Unal postulados", ylab = "Frecuencia", xlab = "Puntajes Unal", col = "skyblue")
+
+
+```
+
+#### Admitidos
+
+Son los puntajes de los admitidos que en algún momento presentaron el examen de admisión.
+
+```{r,warning=FALSE,message=FALSE ,echo=FALSE}
+## admitidos 
+Unal2<- bd2[ bd2$unal_result != 0 & bd2$unal_result != 1 &  bd2$unal_result != 53,]
+hist(Unal2$unal_result,main = "Puntajes Unal Admitidos", ylab = "Frecuencia", xlab = "Puntajes Unal", col = "skyblue")
+```

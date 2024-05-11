@@ -1,0 +1,211 @@
+---
+title: "Simulacros"
+format: html
+editor: visual
+---
+
+### Primer Simulacro
+
+#### Resultados por áreas
+
+Vemos que el área a la que le fue mejor en este primer simulacro fue análisis de imagen y la que le fue mal es Ciencias Naturales.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+library(readxl)
+library(plotly)
+
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+S1 <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/Simulacros.xlsx", 
+    sheet = "Simulacro 1")
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+puntajes1<- data.frame(S1[,5:10])
+## Crear el boxplot comparativo
+fig <- plot_ly(y = puntajes1$Textual, type = "box", name="Textual")
+fig <- fig %>% add_trace(y = puntajes1$Matemáticas, name="Matemáticas")
+fig <- fig %>% add_trace(y = puntajes1$Sociales,  name="Ciencias Sociales")
+fig <- fig %>% add_trace(y = puntajes1$Naturales,  name="Ciencias Naturales")
+fig <- fig %>% add_trace(y = puntajes1$Imagen, name="Análisis de Imagen")
+#fig <- fig %>% add_trace(y = puntajes1$Global, name="Puntajes Globales")
+fig <- fig %>% layout(title = "Simulacro Uno")
+
+fig
+
+```
+
+#### Puntaje Global Primer Simulacro
+
+Se muestra la distribución del puntaje global, vemos que tiende un poco a derecha es decir que los puntajes en su mayoria estan por encima del promedio estandar.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(x = puntajes1$Global, type = "histogram", name = "Puntaje Global Primer Simulacro") %>%
+  layout(title = "Puntaje Global Primer Simulacro",
+         xaxis = list(title = "Puntaje"),
+         yaxis = list(title = "Frecuencia"))
+
+fig
+```
+
+### Segundo Simulacro
+
+#### Resultados por áreas
+
+Vemos que el área a la que le fue mejor en este Segundo simulacro fue análisis de imagen y la que le fue mal es Matematicas.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+S2 <- read_excel("C:/Users/fabia/OneDrive - Universidad Nacional de Colombia/Comunidad Buho/2024 informes/Simulacros.xlsx", 
+    sheet = "Simulacro 2")
+```
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+puntajes2<- data.frame(S2[,5:10])
+## Crear el boxplot comparativo
+fig <- plot_ly(y = puntajes2$Textual, type = "box", name="Textual")
+fig <- fig %>% add_trace(y = puntajes2$Matemáticas, name="Matemáticas")
+fig <- fig %>% add_trace(y = puntajes2$Sociales,  name="Ciencias Sociales")
+fig <- fig %>% add_trace(y = puntajes2$Ciencias,  name="Ciencias Naturales")
+fig <- fig %>% add_trace(y = puntajes2$Imagen, name="Análisis de Imagen")
+#fig <- fig %>% add_trace(y = puntajes1$Global, name="Puntajes Globales")
+fig <- fig %>% layout(title = "Simulacro Dos")
+
+fig
+
+```
+
+#### Puntaje Global Segundo Simulacro
+
+Se muestra la distribución del puntaje global, vemos que tiende un poco a derecha es decir que los puntajes en su mayoria estan por encima del promedio estandar.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(x = puntajes2$Global, type = "histogram", name = "Puntaje Global Segundo Simulacro") %>%
+  layout(title = "Puntaje Global Segundo Simulacro",
+         xaxis = list(title = "Puntaje"),
+         yaxis = list(title = "Frecuencia"))
+
+fig
+```
+
+### Comparación por áreas
+
+#### Textual
+
+Textual tuvo una mejora en el segundo simulacro.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Textual, type = "box", name="Textual_S1")
+fig <- fig %>% add_trace(y = puntajes2$Textual, name="Textual_S2")
+fig <- fig %>% layout(title = "Textual")
+
+fig
+```
+
+#### Matemáticas
+
+Matemáticas vemos que en el segundo simulacro hubo una caida de puntajes, lo cual afecto su rendimiento.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Matemáticas, type = "box", name="Matemáticas_S1")
+fig <- fig %>% add_trace(y = puntajes2$Matemáticas, name="Matemáticas_S2")
+fig <- fig %>% layout(title = "Matemáticas")
+
+fig
+```
+
+#### Ciencias Sociales
+
+Ciencias sociales tuvo una mejora en el segundo simulacro.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Sociales, type = "box", name="Sociales_S1")
+fig <- fig %>% add_trace(y = puntajes2$Sociales, name="Sociales_S2")
+fig <- fig %>% layout(title = "Ciencias Sociales")
+
+fig
+```
+
+#### Ciencias Naturales
+
+Ciencias naturales tuvo una mejora en el segundo simulacro.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Naturales, type = "box", name="Naturales_S1")
+fig <- fig %>% add_trace(y = puntajes2$Ciencias, name="Naturales_S2")
+fig <- fig %>% layout(title = "Ciencias Naturales")
+
+fig
+```
+
+#### Análisis de Imagen
+
+Análisis de imagen se mantuvo en los dos simulacros.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Imagen, type = "box", name="Imagen_S1")
+fig <- fig %>% add_trace(y = puntajes2$Imagen, name="Imagen_S2")
+fig <- fig %>% layout(title = "Análisis de Imagen")
+fig
+```
+
+### Resultados globales de los simulacros
+
+Vemos que en general en los dos simulacros se mantuvieron los puntajes, es decir que no hay un mejora.
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+fig <- plot_ly(y = puntajes1$Global, type = "box", name="Puntaje Global/S1")
+fig <- fig %>% add_trace(y = puntajes2$Global, name="Puntaje Global/S2")
+fig <- fig %>% layout(title = "Puntaje Global")
+
+fig
+```
+
+### Rendimiento del mochuelx
+
+Se presenta la comparación individual de cada mochuelx en las diferentes áreas y su puntaje global.
+
+#### Puntaje global
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+General <- merge(S1, S2, by = "Documento")
+library(pyramid)
+
+datos_global<-data.frame(S1=General$Global.x,S2=General$Global.y,Nombre=General$Nombres.x)
+pyramid(datos_global,Llab="S1",Rlab="S2",Clab="Nombre",main="Rendimiento Global ",Lcol="green", Rcol="cyan", Cgap=0.4,Csize=0.5)
+```
+
+#### Textual
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_textual<-data.frame(S1=General$Textual.x,S2=General$Textual.y,Nombre=General$Nombres.x)
+pyramid(datos_textual,Llab="S1",Rlab="S2",Clab="Nombre",main="Rendimiento Textual ",Lcol="green", Rcol="cyan", Cgap=0.4,Csize=0.5)
+```
+
+#### Matemáticas
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_mate<-data.frame(S1=General$Matemáticas.x,S2=General$Matemáticas.y,Nombre=General$Nombres.x)
+pyramid(datos_mate,Llab="S1",Rlab="S2",Clab="Nombre",main="Rendimiento Matemáticas ",Lcol="green", Rcol="cyan", Cgap=0.4,Csize=0.5)
+```
+
+#### Ciencias Sociales
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_soci<-data.frame(S1=General$Sociales.x,S2=General$Sociales.y,Nombre=General$Nombres.x)
+pyramid(datos_soci,Llab="S1",Rlab="S2",Clab="Nombre",main="Rendimiento Ciencias Sociales ",Lcol="green", Rcol="cyan", Cgap=0.4,Csize=0.5)
+```
+
+#### Ciencias Naturales
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_natu<-data.frame(S1=General$Naturales,S2=General$Ciencias,Nombre=General$Nombres.x)
+pyramid(datos_natu,Llab="S1",Rlab="S2",Clab="Nombre",main="Rendimiento Ciencias Naturales ",Lcol="green", Rcol="cyan", Cgap=0.4,Csize=0.5)
+```
+
+#### Análisis de Imagen
+
+```{r,warning=FALSE,message=FALSE, echo=FALSE}
+datos_imag<-data.frame(S1=General$Imagen.x,S2=General$Imagen.y,Nombre=General$Nombres.x)
+pyramid(datos_imag,Llab="S1",Rlab="S2",Clab="Nombre",main="Rendimiento Análisis de Imagen ",Lcol="green", Rcol="cyan", Cgap=0.4,Csize=0.5)
+```
